@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <meta charset="UTF-8" />
+    <title>All Patients</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</h:head>
+
+<h:body style = "font-family: monospace , 'Lucida Console';" >
+    <f:view>
+        <h:form>
+
+            <div>
+                <nav class="navbar bg-body-tertiary fixed-top">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#">E-health System</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menus</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href = "#{facesContext.externalContext.applicationContextPath}/faces/page.xhtml">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href = "#{facesContext.externalContext.applicationContextPath}/faces/allPatientsNoDoc.xhtml">All Patients Without Doctor</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="#{facesContext.externalContext.applicationContextPath}/faces/edit.xhtml?email=NULL">Add New Patient</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+            <br/><br/><br/>
+
+            <div>
+            <h:dataTable value="#{demo.allPatients}" var="o">
+                <h:column>
+                    <h:link value="#{o.email}" outcome="details">
+                        <f:param name="email" value="#{o.email}" />
+                    </h:link>
+                </h:column>
+                <h:column>#{o.name}</h:column>
+                <h:column>#{o.surname}</h:column>
+                <h:column>#{o.doctor}</h:column>
+                <h:column>#{o.details}</h:column>
+                <h:column>
+                    <h:link class = "btn btn-primary" value="Edit" outcome="edit">
+                        <f:param name="email" value="#{o.email}" />
+                    </h:link>
+
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        Delete
+                    </button>
+
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmation</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete this patient?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <h:commandButton  value="Delete" class = "btn btn-primary" action="#{demo.deletePatient(o)}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h:commandLink class = "btn btn-primary" value="Delete" actionListener="#{demo.deletePatient(o)}" style="display: none;" />
+
+                </h:column>
+            </h:dataTable>
+            </div>
+        </h:form>
+    </f:view>
+</h:body>
+
+</html>
